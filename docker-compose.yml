@@ -1,0 +1,26 @@
+version: "3"
+
+x-basic-setting: &basic-setting
+  init: true
+  restart: unless-stopped
+  platform: linux/amd64
+
+networks:
+  swaggerapi:
+    name: swaggerapi
+    driver: bridge
+
+services:
+  swaggerapi-editor:
+    <<: *basic-setting
+    image: docker.io/swaggerapi/swagger-editor:latest
+    container_name: swaggerapi-editor
+    working_dir: /tmp
+    networks:
+      - swaggerapi
+    ports:
+      - 80:8080
+    environment:
+      - SWAGGER_FILE=/tmp/example/swagger.yaml
+    volumes:
+      - .:/tmp:rw
